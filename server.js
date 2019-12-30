@@ -43,6 +43,20 @@ app.post('/api/v1/messages', (request, response) => {
     })
 })
 
+app.delete('/api/v1/messages/:id', (request, response) => {
+  database('messages').where('id', request.params.id).del()
+    .then((message) => {
+      if (message) {
+        response.status(200).json({ message: `You successfully deleted message with id ${request.params.id}` })
+      } else {
+        response.status(404).json({ error: `Could not find message with id ${request.params.id}` })
+      }
+    })
+    .catch((error) => {
+      response.status(500).json({ error })
+    })
+})
+
 app.listen(app.get('port'), () => {
   console.log(`Portfolio Site API is running on http://localhost:${app.get('port')}.`);
 });
